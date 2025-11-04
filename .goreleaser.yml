@@ -1,0 +1,54 @@
+# .goreleaser.yml
+version: 2
+project_name: micomido
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: micomido
+    main: ./main.go
+    binary: micomido
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+  - id: migrator
+    main: ./cmd/migrator/main.go
+    binary: migrator
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+    goarch:
+      - amd64
+
+dockers:
+  - image_templates:
+      - "ghcr.io/{{ .Repo.Owner }}/{{ .Repo.Name }}:{{ .Version }}"
+      - "ghcr.io/{{ .Repo.Owner }}/{{ .Repo.Name }}:latest"
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--label=org.opencontainers.image.created={{.Date}}"
+      - "--label=org.opencontainers.image.title={{.ProjectName}}"
+      - "--label=org.opencontainers.image.revision={{.FullCommit}}"
+      - "--label=org.opencontainers.image.version={{.Version}}"
+    extra_files:
+      - migrations
+
+release:
+  # You can customize the release notes here
+  # More info at https://goreleaser.com/customization/release/
+  prerelease: "auto"
+
+snapshot:
+  # The name of the snapshot.
+  # Default is `SNAPSHOT-{{.ShortCommit}}`.
+  name_template: "{{ .ShortCommit }}"
+
+checksum:
+  name_template: 'checksums.txt'
