@@ -25,7 +25,7 @@ jobs:
 
       - name: Generate version
         id: version
-        run: echo "VERSION=v$(date +'%Y.%m.%d').${{ github.run_number }}" >> $GITHUB_OUTPUT
+        run: echo "VERSION=v0.1.$(git rev-list --count HEAD)" >> $GITHUB_OUTPUT
 
       - name: Create git tag
         run: |
