@@ -28,7 +28,7 @@ builds:
 
 dockers:
   - image_templates:
-      - "ghcr.io/KrlLevchenko/micomido:{{ .Version }}"      
+      - "ghcr.io/krllevchenko/micomido:{{ .Version }}"      
     dockerfile: Dockerfile
     build_flag_templates:
       - "--platform=linux/amd64"
