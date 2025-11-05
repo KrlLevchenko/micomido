@@ -1,6 +1,6 @@
 {
 	"name": "MiComido (Compose)",
-	"dockerComposeFile": "../docker-compose.yml",
+	"dockerComposeFile": "./docker-compose.yml",
 	"service": "app",
 	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
