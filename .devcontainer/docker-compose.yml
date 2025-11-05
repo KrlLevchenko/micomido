@@ -1,5 +1,8 @@
 version: '3.8'
 
+networks:
+  micomido-net:
+
 services:
   app:
     build:
@@ -14,11 +17,13 @@ services:
       - AWS_ACCESS_KEY_ID=minioadmin
       - AWS_SECRET_ACCESS_KEY=minioadmin
       - AWS_REGION=us-east-1
-      # For S3 client to work with MinIO
-      - AWS_ENDPOINT_URL=http://s3:9000 
+      - AWS_ENDPOINT_URL=http://s3:9000
     depends_on:
       - db
       - s3
+    networks:
+      - micomido-net
+
   db:
     image: mysql:8.0
     environment:
@@ -30,6 +35,9 @@ services:
       - "3306:3306"
     volumes:
       - mysql-data:/var/lib/mysql
+    networks:
+      - micomido-net
+
   s3:
     image: minio/minio:latest
     environment:
@@ -41,6 +49,8 @@ services:
     command: server /data --console-address ":9001"
     volumes:
       - minio-data:/data
+    networks:
+      - micomido-net
 
 volumes:
   mysql-data:
